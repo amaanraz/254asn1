@@ -50,7 +50,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
     instruction.itype.imm = instruction_bits & ((1U << 12) -1);
 
-  break;
+  break;  
   
   // LOAD
   case 0x3:
@@ -66,6 +66,8 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
     instruction.itype.imm = instruction_bits & ((1U << 12) - 1);
     break;
+          
+      
   //SBtype
   case 0x63:
     // opcode, imm5, funct3, rs1, rs2, imm7
@@ -108,7 +110,7 @@ Instruction parse_instruction(uint32_t instruction_bits) {
 
     instruction.itype.imm = instruction_bits & ((1U << 12) -1);
 
-  break;
+    break;
       
   // S-Type
   case 0x23:
@@ -125,7 +127,15 @@ Instruction parse_instruction(uint32_t instruction_bits) {
     instruction_bits >>= 5;
 
     instruction.stype.imm7 = instruction_bits & ((1U << 7) - 1);
-  break;
+    break;
+      
+    // U-Type
+  case 0x37:
+    instruction.utype.rd = instruction_bits & ((1U << 5) -1);
+    instruction_bits >>=5;
+
+    instruction.utype.imm = instruction_bits;
+    break;
   
   // cases for other types of instructions
   /* YOUR CODE HERE */
@@ -235,7 +245,12 @@ int get_jump_offset(Instruction instruction) {
  * given store instruction */
 int get_store_offset(Instruction instruction) {
   /* YOUR CODE HERE */
-  return 0;
+  int imm_5 = instruction.stype.imm5;
+  int imm_7 = instruction.stype.imm7 << 5;
+
+  int imm_final = imm_5 + imm_7;
+
+  return imm_final;
 }
 /************************Helper functions************************/
 
