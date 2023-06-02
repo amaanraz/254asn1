@@ -218,6 +218,15 @@ void write_store(Instruction instruction) {
     switch (instruction.stype.funct3) {
       /* YOUR CODE HERE */
       /* call print_store */
+        case 0x0:
+            print_store("sb", instruction);
+            break;
+        case 0x1:
+            print_store("sh", instruction);
+            break;
+        case 0x2:
+            print_store("sw", instruction);
+            break;
         default:
             handle_invalid_instruction(instruction);
             break;
@@ -256,6 +265,7 @@ void print_load(char *name, Instruction instruction) {
 
 void print_store(char *name, Instruction instruction) {
     /* YOUR CODE HERE */
+    printf(MEM_FORMAT, name,  instruction.stype.rs2, get_store_offset(instruction), instruction.stype.rs1);
 }
 
 void print_branch(char *name, Instruction instruction) {
@@ -264,6 +274,7 @@ void print_branch(char *name, Instruction instruction) {
 
 void print_lui(Instruction instruction) {
     /* YOUR CODE HERE */
+    printf(LUI_FORMAT, instruction.utype.rd, instruction.utype.imm);
 }
 
 void print_jal(Instruction instruction) {
