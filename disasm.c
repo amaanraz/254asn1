@@ -176,7 +176,10 @@ void write_itype_except_load(Instruction instruction) {
                     print_itype_except_load("srli", instruction, instruction.itype.imm);
                     break;
                 case 0x20:
-                    print_itype_except_load("srai", instruction, instruction.itype.imm);
+                    shift_imm = 31;
+                    shift_imm = shift_imm & instruction.itype.imm;
+                    // change srai to output first four bits
+                    print_itype_except_load("srai", instruction, shift_imm);
                     break;
                 default:
                     handle_invalid_instruction(instruction);
