@@ -150,37 +150,14 @@ void write_rtype(Instruction instruction) {
 }
 
 void write_itype_except_load(Instruction instruction) {
-    int shift_imm;
     switch (instruction.itype.funct3) {
       /* YOUR CODE HERE */
+      int shift_imm;
         case 0x0:
             print_itype_except_load("addi", instruction, instruction.itype.imm);
             break;
-        case 0x4:
-            print_itype_except_load("xori", instruction, instruction.itype.imm);
-            break;
-        case 0x6:
-            print_itype_except_load("ori", instruction, instruction.itype.imm);
-            break;
-        case 0x7:
-            print_itype_except_load("andi", instruction, instruction.itype.imm);
-            break;
         case 0x1:
             print_itype_except_load("slli", instruction, instruction.itype.imm);
-            break;
-        case 0x5:
-            shift_imm = instruction.itype.imm >> 10;
-            switch(shift_imm) {
-                case 0x0:
-                    print_itype_except_load("srli", instruction, instruction.itype.imm);
-                    break;
-                case 0x1:
-                    print_itype_except_load("srai", instruction, instruction.itype.imm);
-                    break;
-                default:
-                    handle_invalid_instruction(instruction);
-                    break;
-            }
             break;
         case 0x2:
             print_itype_except_load("slti", instruction, instruction.itype.imm);
@@ -188,8 +165,30 @@ void write_itype_except_load(Instruction instruction) {
         case 0x3:
             print_itype_except_load("sltiu", instruction, instruction.itype.imm);
             break;
-    
+        case 0x4:
+            print_itype_except_load("xori", instruction, instruction.itype.imm);
+            break;
 
+        case 0x5:
+            shift_imm = instruction.itype.imm >> 5;
+            switch(shift_imm) {
+                case 0x00:
+                    print_itype_except_load("srli", instruction, instruction.itype.imm);
+                    break;
+                case 0x20:
+                    print_itype_except_load("srai", instruction, instruction.itype.imm);
+                    break;
+                default:
+                    handle_invalid_instruction(instruction);
+                    break;
+            }
+            break;
+        case 0x6:
+            print_itype_except_load("ori", instruction, instruction.itype.imm);
+            break;
+        case 0x7:
+            print_itype_except_load("andi", instruction, instruction.itype.imm);
+            break;
       /* call print_itype_except_load */
         default:
             handle_invalid_instruction(instruction);
@@ -247,8 +246,8 @@ void print_rtype(char *name, Instruction instruction) {
 
 void print_itype_except_load(char *name, Instruction instruction, int imm) {
     /* YOUR CODE HERE */
-    printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.funct3,
-        instruction.itype.rs1);
+    printf(ITYPE_FORMAT, name, instruction.itype.rd, instruction.itype.rs1,
+        sign_extend_number(imm, 12));
 }
 
 void print_load(char *name, Instruction instruction) {
