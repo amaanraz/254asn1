@@ -147,6 +147,22 @@ Instruction parse_instruction(uint32_t instruction_bits) {
  * interpreted an n-bit integer. */
 int sign_extend_number(unsigned int field, unsigned int n) {
   /* YOUR CODE HERE */
+  int size = 0;
+  int var = field;
+  while(var != 0) {
+    var >>= 1;
+    size++;
+  }
+  int msb_mask = 1 << (n-1);
+  int signed_bit = field & msb_mask;
+  if(signed_bit != 0) {
+    int extended = (1 << (31));
+    extended = extended >> (31-size);
+    int signed_extended = field | extended;
+    return signed_extended;
+  } else {
+    return field;
+  }
   return 0;
 }
 
